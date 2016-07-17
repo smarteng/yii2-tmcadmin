@@ -5,6 +5,7 @@ namespace mdm\admin\models;
 use Yii;
 use mdm\admin\components\Configs;
 use yii\db\Query;
+use yii\db\Connection;
 
 /**
  * This is the model class for table "menu".
@@ -39,11 +40,27 @@ class Menu extends \yii\db\ActiveRecord
      */
     public static function getDb()
     {
-        if (Configs::instance()->db !== null) {
-            return Configs::instance()->db;
-        } else {
-            return parent::getDb();
-        }
+        $host = '127.0.0.1';
+        $dbname = 'tmc_test';
+        $connection = new Connection([
+            'dsn' => 'mysql:host='.$host.';dbname='.$dbname,
+            'username' => 'root',
+            'password' => '',
+            'charset' => 'utf8',
+            'tablePrefix'=>'t_'
+        ]);
+        $connection->open();
+        return $connection;
+
+        //if (Configs::instance()->db !== null) {
+        //    echo 'sdfdsf';
+        //    exit;
+        //    return Configs::instance()->db;
+        //} else {
+        //    echo 'xxxxx';
+        //    exit;
+        //    return parent::getDb();
+        //}
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 
 namespace mdm\admin\components;
-
+use yii\db\Connection;
 /**
  * DbManager represents an authorization manager that stores authorization information in database.
  *
@@ -27,7 +27,26 @@ class DbManager extends \yii\rbac\DbManager
      */
     private $_assignments = [];
     private $_childrenList;
+    // 修改数据库连接
+    public function init()
+    {
+        parent::init();
+        $host = '127.0.0.1';
+        $dbname = 'tmc_test';
+        $connection = new Connection([
+            'dsn' => 'mysql:host='.$host.';dbname='.$dbname,
+            'username' => 'root',
+            'password' => '',
+            'charset' => 'utf8',
+            'tablePrefix'=>'t_'
+        ]);
+        $connection->open();
 
+        $this->db = $connection;
+        if ($this->cache !== null) {
+            $this->cache = Instance::ensure($this->cache, Cache::className());
+        }
+    }
     /**
      * @inheritdoc
      */
